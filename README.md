@@ -1,6 +1,6 @@
 # FolhaDePagamento
-Simple java project witch simulates a commercional company machine that could do some actions like registration of an employee, punch in clock, payroll, etc. 
-Functions:
+Projeto simples em java, simulando uma maquina de alguma empresa comercial que pode realizar ações como: Regristro e remoção de empregado, cartão de ponto, resultado de vendas, agendas de pagamentos, etc...
+Segue abaixo, os métodos principais implementados:
 1 - Adição de um empregado ;
 2 - Remoção de um empregado ;
 3 - Lançar um Cartão de Ponto ;
