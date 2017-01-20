@@ -13,7 +13,9 @@ public class Employee {
     public int hourArrive; // Hora que chegou
     public int hourLeave; // Hora que saiu
     public double salary; // Salário
+    public double incomeService; // Taxa de serviço
     public double unionFee; // Taxa do sindicato
     public double perHour; // Ganho percentual por hora trabalhada
     public double perCom; // Ganho percentual por comissão
+    public int appBook;
 }

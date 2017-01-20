@@ -231,19 +231,50 @@ public class FolhaDePagamento {
         return -1;
     }
     
+    static Employee[] copyStatusArray(Employee[] emp, Employee[] copy, int i){
+        
+        /* Salvar as informações, criando uma copia, antes de qualquer
+        ação para o caso UNDO
+        */
+        int k;
+        for(k = 0; k < i; k++)
+        {
+            copy[k].name = emp[k].name;
+            copy[k].address = emp[k].address;
+            copy[k].type = emp[k].type;
+            copy[k].syndicate = emp[k].syndicate;
+            copy[k].payday = emp[k].payday;
+            copy[k].payment = emp[k].payment;
+            copy[k].incomeService = emp[k].incomeService;
+            copy[k].salary = emp[k].salary;
+            copy[k].unionFee = emp[k].unionFee;
+            copy[k].perCom = emp[k].perCom;
+            copy[k].perHour = emp[k].perHour;
+            copy[k].hourArrive = emp[k].hourArrive;
+            copy[k].hourLeave = emp[k].hourLeave;
+            copy[k].id = emp[k].id;
+            copy[k].workHoursToday = emp[k].workHoursToday;
+            copy[k].workHoursTotal = emp[k].workHoursTotal;
+        }
+        return copy;
+    }
+    
     public static void main(String[] args){
         
         int i, j, d;
-        int lastCommand = -1;
         String c;
+        String newappBook;
         int max = 100;
         int r; // Guardar o faturamento da empresa
         double t; // Pegar uma taxa de serviço
+        
         Employee[] emp = new Employee[max];
+        Employee[] copy = new Employee[max];
         Scanner input  = new Scanner(System.in);
   
         for(i = 0; i < 100; i++){
             emp[i] = new Employee();
+            copy[i] = new Employee();
         }
         
         // TESTS
@@ -292,6 +323,8 @@ public class FolhaDePagamento {
         i = 4; // Controle do numero de empregados
 
         do{
+            System.out.println("------------- RoboVision 2000 -------------");
+            
             System.out.println("Please, insert the number of your action:");
             System.out.println("1 - Add a new employee");
             System.out.println("2 - Remove an employee");
@@ -308,7 +341,12 @@ public class FolhaDePagamento {
             n = input.nextShort(); // Captura a ação desejada
             c = input.nextLine(); // Pegando /n do ultimo scanner
             
+            if(n < 8){
+                copy = copyStatusArray(emp, copy, i);
+            }
+            
             switch(n){
+                
                 case 0: // Sair
                     
                     System.out.println("Thank you for been using our services!");
@@ -316,7 +354,7 @@ public class FolhaDePagamento {
                     break;
                 
                 case 1: // Adicionar um novo empregado
-                    
+                   
                     int o = overflow(i, emp); // Verificação de vagas na empresa
                     
                     if(o == -1){
@@ -326,6 +364,7 @@ public class FolhaDePagamento {
                     emp = add(emp, o); // Adicionar empregado
                     
                     System.out.println(emp[o].name + " Was added!");
+                    
                     i++;
                     
                     break;
@@ -401,8 +440,8 @@ public class FolhaDePagamento {
                     System.out.println("Please, reference to what employee?");
                     System.out.println("ID:");
                     j = input.nextInt();
-                    emp[j].salary *= t; // Desconta a taxa no salario do empregado
-                    
+                    emp[j].incomeService = t;
+                            
                     break;
                     
                 case 6: // Alterar dados
@@ -444,18 +483,29 @@ public class FolhaDePagamento {
                                     x = (emp[k].workHoursTotal * emp[k].perHour);
                                     if(emp[k].syndicate == 1){
                                         x *= (1 - emp[k].unionFee);
-                                    }   System.out.println(emp[k].name + " recebeu " + x);
+                                    }
+                                    if(emp[k].incomeService > 0){
+                                        x *= (1 - emp[k].incomeService);
+                                    }
+                                    System.out.println(emp[k].name + " recebeu " + x);
                                     break;
                                 case 2:
                                     // MENSAL
                                     x = emp[k].salary;
                                     if(emp[k].syndicate == 1){
                                         x *= (1 - emp[k].unionFee);
-                                    }   System.out.println(emp[k].name + " recebeu " + x);
+                                    }
+                                    if(emp[k].incomeService > 0){
+                                        x *= (1 - emp[k].incomeService);
+                                    }
+                                    System.out.println(emp[k].name + " recebeu " + x);
                                     break;
                                 case 3:
                                     // COMISSIONADO
                                     x = emp[k].salary;
+                                    if(emp[k].incomeService > 0){
+                                        x *= (1 - emp[k].incomeService);
+                                    }
                                     System.out.println(emp[k].name + " recebeu " + x);
                                     emp[k].salary = 0;
                                     break;
@@ -466,16 +516,48 @@ public class FolhaDePagamento {
                         }
                     }
                     break;
-                case 8: // UNDO
+                case 8: // UNDO / REDO
+                    
+                    emp = copy; /* Copiar para o array informações anteriores
+                    a ultima ação realizada
+                    */
                     
                     break;
+                    
                 case 9: // AGENDA DE PAGAMENTO
+                    
+                    System.out.println(" ------- Appointment books ----------");
+                    
+                    System.out.print("\nInsert your ID:\n");
+                    j = input.nextInt();
+                    
+                    System.out.print(emp[j].name + " choose a way to receive:\n\n");
+                    
+                    System.out.println("1 - Weekly");
+                    System.out.println("2 - Monthly");
+                    System.out.print("3 - bi-weekly\n");
+                    
+                    d = input.nextInt();
+                    
+                    emp[j].appBook = d;
+                    
+                    System.out.println(emp[j] + " way choosed");
+                    
                     break;
+                
+                case 10:
+                    
+                    System.out.println("Let's create a new Appointment books");
+                    newappBook = input.nextLine();
+                    
+                    break;
+                
                 default:
                     System.out.println("Invalid Number, please try again");
                     break;
             }
             System.out.print("\n");
+            
         }while(n != 0);
     }
     
