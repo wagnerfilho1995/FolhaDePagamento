@@ -5,8 +5,8 @@ public class Employee {
     public String address; // Endereço
     public int syndicate; // Sindicato
     public int type; // Tipo
+    public int payment; // Método de pagamento
     public int id; // Identificação
-    public int payment; // Tipo de remuneração
     public int payday;  // Dia a receber
     public int workHoursToday; // Horas trabalhadas hoje
     public int workHoursTotal; // Horas trabalhadas totais

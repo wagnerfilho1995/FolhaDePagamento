@@ -9,9 +9,9 @@ public class FolhaDePagamento {
         
         Scanner input  = new Scanner(System.in);
   
-        System.out.println("Let's add a new Employee");
+        System.out.println("+++++ Let's add a new Employee +++++");
         
-        System.out.println("Name:");
+        System.out.println("Full name:");
         
         emp[i].name = input.nextLine();
         
@@ -38,34 +38,32 @@ public class FolhaDePagamento {
         
         switch (emp[i].type) {
             case 1:
-                System.out.println("How much per hour?");
+                System.out.println("How much per hour? ( % )");
                 emp[i].perHour = input.nextDouble();
+                emp[i].perHour /= 100;
+                System.out.println("By default of our company, " + emp[i].name
+                + " will be receiving by fridays");
                 break;
             case 2:
                 System.out.println("Salary:");
                 emp[i].salary = input.nextDouble();
+                System.out.println("By default of our company, " + emp[i].name
+                + " will be receiving every 15th day mounthly");
+                emp[i].payday = 15;
                 break;
             case 3:
-                System.out.println("What is the percentage of your billing?");
+                System.out.println("How much per commission? ( % )");
                 emp[i].perCom = input.nextDouble();
+                emp[i].perCom /= 100;
+                System.out.println("By default of our company, " + emp[i].name
+                + " will be receiving two by two fridays");
                 break;
             default:
                 break;
         }
-        System.out.println("Type of Payment:");
-        System.out.println("1 - Hourly");
-        System.out.println("2 - Monthly");
-        System.out.println("3 - commission");
         
-        emp[i].payment = input.nextInt();
-            if(emp[i].payment == 2){
-                System.out.println("When is the payday?");
-                emp[i].payday = input.nextInt();
-            }
-            else if(emp[i].payment == 3){
-                System.out.println("By Convention of our company, he will been receiving out by day 15");
-                emp[i].payday = 15; // CONVENÇÃO 
-            }
+        
+        System.out.println("Obs: The payday can be change later");
         
         emp[i].id = i;
         
@@ -79,7 +77,6 @@ public class FolhaDePagamento {
         emp[j].name = null;
         emp[j].address = null;
         emp[j].type = 0;
-        emp[j].payment = 0;
         emp[j].payday = 0;
         emp[j].workHoursTotal = 0;
         emp[j].id = -1; /* Tag -1 para indentificar posição
@@ -98,6 +95,7 @@ public class FolhaDePagamento {
         
         do{
             
+            System.out.println("***** Editing *****");
             System.out.println("Please, insert the number of your action:");
             System.out.println("1 - Name");
             System.out.println("2 - Address");
@@ -149,39 +147,50 @@ public class FolhaDePagamento {
                     System.out.println("1 - Hourly");
                     System.out.println("2 - Salaried");
                     System.out.println("3 - Commissioned");
+                    System.out.println("0 - Don't wanna change");
                     emp[j].type = input.nextInt();
                     switch(emp[j].type){
                             case 1:
-                                System.out.println("How much per hour do you won?");
+                                System.out.println("How much per hour? ( % )");
                                 emp[j].perHour = input.nextDouble();
+                                emp[j].perHour /= 100;
+                                System.out.println("By default of our company, " + emp[j].name
+                                + " will be receiving by fridays");
                                 break;
                             case 2:
                                 System.out.println("The new Salary is:");
                                 emp[j].salary = input.nextDouble();
+                                System.out.println("By default of our company, " + emp[j].name
+                                + " will be receiving every 15th day mounthly");
+                                emp[j].payday = 15;
                                 break;
                             case 3:
-                                System.out.println("What is the percentage of your billing?");
+                                System.out.println("How much per commission? ( % )");
                                 emp[j].perCom = input.nextDouble();
+                                emp[j].perCom /= 100;
+                                System.out.println("By default of our company, " + emp[j].name
+                                + " will be receiving two by two fridays");
                                 break;
                             default:
                                 break;
                         }
                     break;
                 case 5:
-                    System.out.println("Right now you receive by " + emp[j].type + " type");
-                    System.out.println("Choose a different:");
-                    System.out.println("1 - Hourly");
-                    System.out.println("2 - Monthly");
-                    System.out.println("3 - commission");
-
-                    emp[j].payment = input.nextInt();
-                        if(emp[j].payment == 2){
-                            System.out.println("When is the payday?");
-                            emp[j].payday = input.nextInt();
+                    
+                    System.out.println("We currently send payments by bank check");
+                    System.out.println("Would you like to receive by another way?");
+                    System.out.println("1 - Bank Check on hand");
+                    System.out.println("2 - Deposit into bank account");
+                    System.out.println("3 - Don't wanna change");
+                    
+                    d = input.nextInt();
+                        if(d == 1){
+                            emp[j].payment = d;
+                            System.out.println("Done! Now you will gonna be receiving your paycheck on your hands");
                         }
-                        else if(emp[j].payment == 3){
-                            System.out.println("By Convention of our company, he will been receiving out by day 15");
-                            emp[j].payday = 15; // CONVENÇÃO 
+                        else if(d == 2){
+                            emp[j].payment = d;
+                            System.out.println("Done! Now your payment will be deposited into your bank account");
                         }
                     break;
                 case 6:
@@ -263,19 +272,31 @@ public class FolhaDePagamento {
         
         int i, j, d;
         String c;
-        String newappBook;
         int max = 100;
         int r; // Guardar o faturamento da empresa
         double t; // Pegar uma taxa de serviço
+        int day = 1; // Dia inicial, domingo    
+        // A primeira sexta feira do mês será no dia 6  
         
         Employee[] emp = new Employee[max];
         Employee[] copy = new Employee[max];
+        AppointmentBook [] books = new AppointmentBook[30];
+
         Scanner input  = new Scanner(System.in);
   
         for(i = 0; i < 100; i++){
             emp[i] = new Employee();
             copy[i] = new Employee();
+            if(i < 30){
+                books[i] = new AppointmentBook();
+            }
         }
+        
+        books[0].type = "Weekly";
+        books[1].type = "Monthly";
+        books[2].type = "Bi-weekly";
+       
+        int booksTypes = 3;
         
         // TESTS
         
@@ -284,7 +305,7 @@ public class FolhaDePagamento {
         emp[0].syndicate = 1; // Pertence ao sindicato
         emp[0].unionFee = 0.05; // Taxa sindical a ser descontada
         emp[0].type = 2; // Assalariado
-        emp[0].payment = 2; // Mensal
+        emp[0].payment = 3; // Check enviado por correios
         emp[0].payday = 15; // Dia do mês a receber
         emp[0].workHoursTotal = 160; // Horas trabalhadas
         emp[0].salary = (3000.00 * (1 - emp[0].unionFee)); // Salário mensal
@@ -295,7 +316,7 @@ public class FolhaDePagamento {
         emp[1].syndicate = 2; // Não pertence ao sindicato
         emp[1].type = 1; // Horista
         emp[1].perHour = 20;
-        emp[1].payment = 1; // Por horas trabalhadas
+        emp[1].payment = 3; // Check enviado por correios
         emp[1].payday = 7; // Dia do mês a receber
         emp[1].workHoursTotal = 80; // Horas trabalhadas
         emp[1].salary = (emp[1].workHoursTotal * emp[1].perHour); /* Salário calculado em função 
@@ -307,9 +328,9 @@ public class FolhaDePagamento {
         emp[2].address = "Maclaren's Pub, New York City";
         emp[2].syndicate = 1; // Pertence ao sindicato
         emp[2].unionFee = 0.05; // Taxa sindical a ser descontada
-        emp[2].type = 3; // Comissionista
+        emp[2].type = 3; // Comissionado
         emp[2].perCom = 0.10;
-        emp[2].payment = 3; // Comissão
+        emp[2].payment = 3; // Check enviado por correios
         emp[2].payday = 10; // Dia do mês a receber
         emp[2].workHoursTotal = 0; /* 0 representa que o salário independe das horas
         de serviço
@@ -323,6 +344,7 @@ public class FolhaDePagamento {
         i = 4; // Controle do numero de empregados
 
         do{
+            
             System.out.println("------------- RoboVision 2000 -------------");
             
             System.out.println("Please, insert the number of your action:");
@@ -332,12 +354,18 @@ public class FolhaDePagamento {
             System.out.println("4 - Launch a new Sold Result");
             System.out.println("5 - Launch a Service Charge");
             System.out.println("6 - Change some details of a new an employee");
-            System.out.println("7 - Show the Payroll");
+            System.out.println("7 - Play the Payroll");
             System.out.println("8 - Undo / Redo");
-            System.out.println("9 - Play the Payroll");
-            System.out.println("10 - Create news payRoll");     
+            System.out.println("9 - To Choose a payment schedule");
+            System.out.println("10 - Create a new Appointment Book");     
             System.out.println("0 - Exit");
             
+                if(day % 7 == 6){
+                    System.out.println("                               Sexta-feira!");
+                }
+                else{
+                    System.out.println("                                     day: " + day);
+                }
             n = input.nextShort(); // Captura a ação desejada
             c = input.nextLine(); // Pegando /n do ultimo scanner
             
@@ -395,14 +423,19 @@ public class FolhaDePagamento {
                     
                     j = input.nextInt();
                     
-                    System.out.println("Are you arriving?");
+                    System.out.println("What day is today?");
+                    
+                    day = input.nextInt();
+                    
+                    System.out.println(emp[j].name);
+                    System.out.println(" are you arriving?");
                     System.out.println("1 - Yes");
                     System.out.println("2 - No");
                     
                     d = input.nextInt();
                     
                         if(d == 1){
-                            System.out.println("What time is it? (Hours*)");
+                            System.out.println("What time is it? (Only Hours*)");
                             emp[j].hourArrive = input.nextInt();
                         }
                         else{
@@ -411,10 +444,10 @@ public class FolhaDePagamento {
                             System.out.println("2 - No");
                             d = input.nextInt();
                                 if(d == 1){
-                                    System.out.println("What time is it? (Hours*)");
+                                    System.out.println("What time is it? (Only Hours*)");
                                     emp[j].hourLeave = input.nextInt();
                                     emp[j].workHoursToday = (emp[j].hourLeave - emp[j].hourArrive);
-                                    System.out.println(emp[j].workHoursToday + "hrs did you worked today");
+                                    System.out.println(emp[j].workHoursToday + " hrs did you worked today!");
                                     emp[j].workHoursTotal += emp[j].workHoursToday;
                                 }
                         }
@@ -533,22 +566,25 @@ public class FolhaDePagamento {
                     
                     System.out.print(emp[j].name + " choose a way to receive:\n\n");
                     
-                    System.out.println("1 - Weekly");
-                    System.out.println("2 - Monthly");
-                    System.out.print("3 - bi-weekly\n");
+                    for(k = 0; k < booksTypes; k++){
+                        System.out.println(k+1 + " - " + books[k].type);
+                    }
                     
                     d = input.nextInt();
                     
                     emp[j].appBook = d;
                     
-                    System.out.println(emp[j] + " way choosed");
+                    System.out.println(books[d-1].type + " way choosed!");
                     
                     break;
                 
                 case 10:
                     
                     System.out.println("Let's create a new Appointment books");
-                    newappBook = input.nextLine();
+                    System.out.println("Choose a name:");
+                    books[booksTypes].type = input.nextLine();
+                    
+                    booksTypes++;
                     
                     break;
                 
