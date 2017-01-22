@@ -38,32 +38,33 @@ public class FolhaDePagamento {
         
         switch (emp[i].type) {
             case 1:
-                System.out.println("How much per hour? ( % )");
+                System.out.println("How much per hour? ( R$ )");
                 emp[i].perHour = input.nextDouble();
                 emp[i].perHour /= 100;
                 System.out.println("By default of our company, " + emp[i].name
-                + " will be receiving by fridays");
+                + " will be receiving a check in your house by fridays");
                 break;
             case 2:
                 System.out.println("Salary:");
                 emp[i].salary = input.nextDouble();
                 System.out.println("By default of our company, " + emp[i].name
-                + " will be receiving every 15th day mounthly");
+                + " will be receiving a check in your house every 15th day mounthly");
                 emp[i].payday = 15;
                 break;
             case 3:
+                System.out.println("Salary Fixed:");
+                emp[i].salary = input.nextDouble();
                 System.out.println("How much per commission? ( % )");
                 emp[i].perCom = input.nextDouble();
                 emp[i].perCom /= 100;
                 System.out.println("By default of our company, " + emp[i].name
-                + " will be receiving two by two fridays");
+                + " will be receiving a check in your house two by two fridays");
                 break;
             default:
                 break;
         }
         
-        
-        System.out.println("Obs: The payday can be change later");
+        System.out.println("Obs: The way of payment can be change later");
         
         emp[i].id = i;
         
@@ -79,8 +80,9 @@ public class FolhaDePagamento {
         emp[j].type = 0;
         emp[j].payday = 0;
         emp[j].workHoursTotal = 0;
-        emp[j].id = -1; /* Tag -1 para indentificar posição
-        livre no array de empregados
+        emp[j].id = -1; 
+        /* 
+            Tag -1 para indentificar posição livre no array de empregados
         */ 
         
         return emp;
@@ -109,7 +111,7 @@ public class FolhaDePagamento {
             n = input.nextInt();
             
             switch(n){
-                case 0:
+                case 0: // SAIDA
                     break;
                 case 1:
                     System.out.println("Would you like to change the name of " + emp[j].name + " ?");
@@ -140,6 +142,10 @@ public class FolhaDePagamento {
                     System.out.println("2 - No");
                     d = input.nextInt();
                     emp[j].syndicate = d;
+                        if(d == 1){
+                            System.out.println("Insert the Union Fee:");
+                            emp[j].unionFee = input.nextDouble();
+                        }
                     break;
                 case 4:
                     System.out.println("Right now you are from " + emp[j].type + " type of Employee");
@@ -151,30 +157,33 @@ public class FolhaDePagamento {
                     emp[j].type = input.nextInt();
                     switch(emp[j].type){
                             case 1:
-                                System.out.println("How much per hour? ( % )");
+                                System.out.println("How much per hour? ( R$ )");
                                 emp[j].perHour = input.nextDouble();
-                                emp[j].perHour /= 100;
                                 System.out.println("By default of our company, " + emp[j].name
-                                + " will be receiving by fridays");
+                                + " will be receiving a check in your house by fridays");
                                 break;
                             case 2:
                                 System.out.println("The new Salary is:");
                                 emp[j].salary = input.nextDouble();
                                 System.out.println("By default of our company, " + emp[j].name
-                                + " will be receiving every 15th day mounthly");
+                                + " will be receiving a check in your house every 15th day mounthly");
                                 emp[j].payday = 15;
                                 break;
                             case 3:
+                                System.out.println("Salary Fixed:");
+                                emp[j].salary = input.nextDouble();
                                 System.out.println("How much per commission? ( % )");
                                 emp[j].perCom = input.nextDouble();
                                 emp[j].perCom /= 100;
                                 System.out.println("By default of our company, " + emp[j].name
-                                + " will be receiving two by two fridays");
+                                + " will be receiving a check in your house two by two fridays");
                                 break;
                             default:
                                 break;
                         }
+                    
                     break;
+                    
                 case 5:
                     
                     System.out.println("We currently send payments by bank check");
@@ -192,8 +201,11 @@ public class FolhaDePagamento {
                             emp[j].payment = d;
                             System.out.println("Done! Now your payment will be deposited into your bank account");
                         }
+                    
                     break;
+                
                 case 6:
+                    
                     System.out.println("Would you like to change the ID " + emp[j].id + " ?");
                     System.out.println("1 - Yes");
                     System.out.println("2 - No");
@@ -207,10 +219,13 @@ public class FolhaDePagamento {
                             emp[j].id = d;
                             System.out.println("The new ID is " + emp[j].id);
                         }
+                    
                     break;
+                
                 case 7:
+                
                     System.out.println("Union fee current: " + emp[j].unionFee);
-                    System.out.println("Would you like to change ?");
+                    System.out.println("Would you like to change?");
                     System.out.println("1 - Yes");
                     System.out.println("2 - No");
                     d = input.nextInt();
@@ -218,15 +233,20 @@ public class FolhaDePagamento {
                             System.out.println("Please, insert the new value:");
                             emp[j].unionFee = input.nextDouble();
                         }
+                    
+                    break;
+                    
+                default:
                     break;
             }
-        }while(n != 0);
+            
+        } while(n != 0);
             
         return emp;
     }
     
     static int overflow(int i, Employee[] emp){
-        if(i < 100)return i;
+        if(i < 100 || emp[i].id == -1) return i;
         int k;
         /*
             Procurar um espaço vazio, devido a uma previa remoção de
@@ -254,6 +274,7 @@ public class FolhaDePagamento {
             copy[k].syndicate = emp[k].syndicate;
             copy[k].payday = emp[k].payday;
             copy[k].payment = emp[k].payment;
+            copy[k].appBook = emp[k].appBook;
             copy[k].incomeService = emp[k].incomeService;
             copy[k].salary = emp[k].salary;
             copy[k].unionFee = emp[k].unionFee;
@@ -268,19 +289,80 @@ public class FolhaDePagamento {
         return copy;
     }
     
+    public static int isFriday(int f, int day){
+        if(day == f){
+            // Hoje é sexta feira!!
+        	f += 7;
+        	if(f > 30) f -= 30;
+            return f; // Retorna a próxima sexta-feira do mês
+        }
+        return 0;
+    }
+    
+    public static int checkId(Employee[] emp, int i){
+        if(emp[i].id == 0 || emp[i].id == -1){
+            return 0;
+        }
+        return 1;
+    }
+    
+    public static int weekday(){
+        short w;
+        
+        System.out.println("Whitch day of the week?");
+        
+        Scanner input  = new Scanner(System.in);
+        
+        System.out.println("1 - Sunday");
+        System.out.println("2 - Monday");
+        System.out.println("3 - Tuesday");
+        System.out.println("4 - Wednesday");
+        System.out.println("5 - Thursday");
+        System.out.println("6 - Friday");
+        System.out.println("7 - Saturday");
+        
+        w = input.nextShort();
+        
+        return w;
+}
+    
     public static void main(String[] args){
         
-        int i, j, d;
-        String c;
-        int max = 100;
-        int r; // Guardar o faturamento da empresa
-        double t; // Pegar uma taxa de serviço
-        int day = 1; // Dia inicial, domingo    
-        // A primeira sexta feira do mês será no dia 6  
+        int i, j, d; 
+        /* 
+            i e j são indices para o array de funcionarios,
+        d captura entradas de decisões. 
+        */
         
-        Employee[] emp = new Employee[max];
-        Employee[] copy = new Employee[max];
-        AppointmentBook [] books = new AppointmentBook[30];
+        String c; 
+        /*
+            Captura o '/n' de alguns comandos anteriores a uma
+        captura de string
+        */
+        
+        int max = 100; // Tamanho do array
+        
+        int r; // Guardar o faturamento da empresa
+        
+        int k; // busca
+        
+        int p; // dia de pagamento
+        
+        double x; // Capturar o salário pago
+                    
+        double t; // Pegar uma taxa de serviço
+        
+        int day = 1; // Dia inicial, domingo    
+        
+        int friday; // tag para indicar se hoje é sexta-feira
+        int f = 6; // Primeira sexta feira do mês
+        int aux = 0; // Auxiliar para contar as sextas feiras
+        
+        int bonusComissoes = 0;
+        
+        Employee[] emp = new Employee[max]; // Array de funcionarios
+        Employee[] copy = new Employee[max]; // Array cópia do array de funcionarios
+        AppointmentBook [] books = new AppointmentBook[30]; // Array das agendas de pagamento
 
         Scanner input  = new Scanner(System.in);
   
@@ -292,11 +374,16 @@ public class FolhaDePagamento {
             }
         }
         
-        books[0].type = "Weekly";
-        books[1].type = "Monthly";
-        books[2].type = "Bi-weekly";
+        books[0].type = "Weekly"; // Semanalmente
+        books[0].weekday = 6; // Sexta-feira
+        
+        books[1].type = "Monthly"; // Mensalmente
+        books[1].payday = 15; 
+        
+        books[2].type = "Bi-weekly"; // Bi-semanalmente
+        books[0].weekday = 6; // Sexta-feira
        
-        int booksTypes = 3;
+        int booksTypes = 3; // Índice para o número atual de agendas 
         
         // TESTS
         
@@ -305,6 +392,7 @@ public class FolhaDePagamento {
         emp[0].syndicate = 1; // Pertence ao sindicato
         emp[0].unionFee = 0.05; // Taxa sindical a ser descontada
         emp[0].type = 2; // Assalariado
+        emp[0].appBook = 2; // Agenda tipo 2 - Mensalmente
         emp[0].payment = 3; // Check enviado por correios
         emp[0].payday = 15; // Dia do mês a receber
         emp[0].workHoursTotal = 160; // Horas trabalhadas
@@ -312,16 +400,18 @@ public class FolhaDePagamento {
         emp[0].id = 1; // Número de identificação
         
         emp[1].name = "Nemo";
-        emp[1].address = "P sherman, 42 wallaby way, Sydney";
+        emp[1].address = "P. Sherman, 42 Wallaby Way, Sydney";
         emp[1].syndicate = 2; // Não pertence ao sindicato
         emp[1].type = 1; // Horista
-        emp[1].perHour = 20;
+        emp[1].appBook = 1; // Agenda tipo 1 - Semanalmente
+        emp[1].perHour = 20; // Receber R$ 20,00 por hora trabalhada 
         emp[1].payment = 3; // Check enviado por correios
-        emp[1].payday = 7; // Dia do mês a receber
-        emp[1].workHoursTotal = 80; // Horas trabalhadas
-        emp[1].salary = (emp[1].workHoursTotal * emp[1].perHour); /* Salário calculado em função 
-                das horas trabalhadas vezes uma taxa de R$ 20,00
-                */
+        emp[1].workHoursTotal = 80; // Horas Totais trabalhadas
+        emp[1].salary = (emp[1].workHoursTotal * emp[1].perHour);
+        /* 
+            Salário calculado em função das horas trabalhadas
+        vezes uma taxa de R$ 20,00
+        */
         emp[1].id = 2; // Número de identificação
         
         emp[2].name = "Ted Mosby";
@@ -329,20 +419,20 @@ public class FolhaDePagamento {
         emp[2].syndicate = 1; // Pertence ao sindicato
         emp[2].unionFee = 0.05; // Taxa sindical a ser descontada
         emp[2].type = 3; // Comissionado
-        emp[2].perCom = 0.10;
+        emp[2].perCom = 0.10; // Taxa a ser aplicada sobre um resultado de venda
         emp[2].payment = 3; // Check enviado por correios
-        emp[2].payday = 10; // Dia do mês a receber
-        emp[2].workHoursTotal = 0; /* 0 representa que o salário independe das horas
-        de serviço
-        */
-        emp[2].salary = (20000 * emp[2].perCom); /* Recebe 10% do faturamento do setor
-        de vendas da empresa
+        emp[2].appBook = 3; // Agenda tipo 3 - Bi-semanalmente
+        emp[2].salary = 3000; 
+        /*
+            O salário de um comissionado é calculado da seguinte forma:
+                salário = salário fixo + comissões
         */
         emp[2].id = 3; // Número de identificação
        
+        i = 4; // Controle do número de empregados
+        
         short n;
-        i = 4; // Controle do numero de empregados
-
+       
         do{
             
             System.out.println("------------- RoboVision 2000 -------------");
@@ -360,16 +450,22 @@ public class FolhaDePagamento {
             System.out.println("10 - Create a new Appointment Book");     
             System.out.println("0 - Exit");
             
-                if(day % 7 == 6){
-                    System.out.println("                               Sexta-feira!");
+            friday = isFriday(day, f);
+                if(friday == 1){
+                    System.out.println("                             Sexta-feira! (" + day + ")");
+                    aux++;
+                        if(aux > 4){ // Controle das sextas-feiras do mês
+                            aux = 0;
+                        }
                 }
                 else{
                     System.out.println("                                     day: " + day);
                 }
+                
             n = input.nextShort(); // Captura a ação desejada
             c = input.nextLine(); // Pegando /n do ultimo scanner
             
-            if(n < 8){
+            if(n < 8){ // Salvar o status do array de funcionarios para um possível undo
                 copy = copyStatusArray(emp, copy, i);
             }
             
@@ -405,7 +501,7 @@ public class FolhaDePagamento {
                         System.out.println("ID not find");
                     }
                     else{
-                        System.out.println("Do you really wanna dismiss " + emp[j].name + "?");
+                        System.out.println("Do you really wanna remove " + emp[j].name + "?");
                         System.out.println("1 - Yes");
                         System.out.println("2 - No");
                         d = input.nextInt(); // Decisão
@@ -428,7 +524,7 @@ public class FolhaDePagamento {
                     day = input.nextInt();
                     
                     System.out.println(emp[j].name);
-                    System.out.println(" are you arriving?");
+                    System.out.println("Are you arriving?");
                     System.out.println("1 - Yes");
                     System.out.println("2 - No");
                     
@@ -460,10 +556,9 @@ public class FolhaDePagamento {
                     r = input.nextInt();
                     System.out.println("Please, insert the ID of whom sell");
                     j = input.nextInt();
-                    if(emp[j].type == 3){ // Recebe uma comissão!
-                        emp[j].salary += (r * emp[j].perCom);
-                    }
-                    
+                        if(emp[j].type == 3){ // Recebe uma comissão!
+                            emp[j].bonusCom += r;
+                        }
                     break;
                     
                 case 5: // Taxa de serviço
@@ -501,18 +596,17 @@ public class FolhaDePagamento {
                 case 7: // RODAR FOLHA DE PAGAMENTO
                     
                     System.out.println("Please, insert the day of payment");
-                    int p = input.nextInt();
-                    int k; // indice de busca
-                    double x; // Capturar o salário pago
+                    p = input.nextInt();
                     
                     for(k = 0; k < i; k++){
-                        
-                        if(emp[k].payday == p){
-                            
-                            System.out.println(emp[k].name);
-                            switch (emp[k].type) {
-                                case 1:
-                                    // HORISTA
+                          
+                        switch (emp[k].type) {
+                            case 1:
+                                // HORISTA
+                                
+                                x = weekday();// Descobrir que dia da semana é hoje
+                                
+                                if(emp[k].appBook != 3 || books[emp[k].appBook].weekday == x){
                                     x = (emp[k].workHoursTotal * emp[k].perHour);
                                     if(emp[k].syndicate == 1){
                                         x *= (1 - emp[k].unionFee);
@@ -521,10 +615,14 @@ public class FolhaDePagamento {
                                         x *= (1 - emp[k].incomeService);
                                     }
                                     System.out.println(emp[k].name + " recebeu " + x);
-                                    break;
-                                case 2:
-                                    // MENSAL
-                                    x = emp[k].salary;
+                                 }
+                                
+                                break;
+                                
+                            case 2:
+                                // MENSAL
+                                x = emp[k].salary;
+                                if(emp[k].payday == p){
                                     if(emp[k].syndicate == 1){
                                         x *= (1 - emp[k].unionFee);
                                     }
@@ -532,20 +630,25 @@ public class FolhaDePagamento {
                                         x *= (1 - emp[k].incomeService);
                                     }
                                     System.out.println(emp[k].name + " recebeu " + x);
-                                    break;
-                                case 3:
-                                    // COMISSIONADO
-                                    x = emp[k].salary;
+                                }
+                                
+                                break;
+                            
+                            case 3:
+                                // COMISSIONADO
+                                if(friday == 1 && aux == 2){ // DUAS SEXTAS FEIRAS
+                                    x = emp[k].salary + emp[k].bonusCom;
                                     if(emp[k].incomeService > 0){
                                         x *= (1 - emp[k].incomeService);
                                     }
                                     System.out.println(emp[k].name + " recebeu " + x);
-                                    emp[k].salary = 0;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            emp[k].workHoursTotal = 0;
+                                    emp[k].bonusCom = 0;
+                                }
+                                
+                                break;
+                            
+                            default:
+                                break;
                         }
                     }
                     break;
@@ -583,8 +686,36 @@ public class FolhaDePagamento {
                     System.out.println("Let's create a new Appointment books");
                     System.out.println("Choose a name:");
                     books[booksTypes].type = input.nextLine();
+                    System.out.println("Based on what options?");
+                    System.out.println("1 - Day(s) in a month");
+                    System.out.println("2 - Weekday(s) in a week");
+                    d = input.nextInt();
+                        
+                        switch(d){
+                            
+                            case 1:
+                            
+                                System.out.println("Please insert a day:");
+                                p = input.nextInt();
+                                books[booksTypes].payday = p;
+                                System.out.println("Done!");
+                                System.out.println(books[booksTypes].type + " " + p + " was created!");
+                                booksTypes++;
+                            
+                            break;
                     
-                    booksTypes++;
+                            case 2:
+                                
+                                p = weekday();
+                                books[booksTypes].weekday = p;
+                                System.out.println("Done!");
+                                System.out.println(books[booksTypes].type + " " + p + " was created!");
+                                booksTypes++;
+                            
+                            default:
+                            
+                            break;
+                         }
                     
                     break;
                 
@@ -592,9 +723,9 @@ public class FolhaDePagamento {
                     System.out.println("Invalid Number, please try again");
                     break;
             }
+            
             System.out.print("\n");
             
         }while(n != 0);
-    }
-    
+    }   
 }

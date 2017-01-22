@@ -17,5 +17,6 @@ public class Employee {
     public double unionFee; // Taxa do sindicato
     public double perHour; // Ganho percentual por hora trabalhada
     public double perCom; // Ganho percentual por comissão
-    public int appBook;
+    public double bonusCom; // Ganho percentual por comissão
+    public int appBook; // Tipo de agenda
 }
