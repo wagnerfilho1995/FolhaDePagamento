@@ -66,7 +66,7 @@ public class FolhaDePagamento {
         
         System.out.println("Obs: The way of payment can be change later");
         
-        emp[i].id = i;
+        emp[i].id = i+1;
         
         System.out.println("The number of ID is: " + i);
                     
@@ -104,8 +104,7 @@ public class FolhaDePagamento {
             System.out.println("3 - Syndicate");
             System.out.println("4 - Type of Employee");
             System.out.println("5 - Type of payment");
-            System.out.println("6 - ID");
-            System.out.println("7 - Union fee");
+            System.out.println("6 - Union fee");
             System.out.println("0 - Exit");
 
             n = input.nextInt();
@@ -205,24 +204,6 @@ public class FolhaDePagamento {
                     break;
                 
                 case 6:
-                    
-                    System.out.println("Would you like to change the ID " + emp[j].id + " ?");
-                    System.out.println("1 - Yes");
-                    System.out.println("2 - No");
-                    d = input.nextInt();
-                        if(d == 1){
-                            System.out.println("Please, insert the new ID (1 - 100):");
-                            while(emp[d-1].id != 0 && emp[d-1].id != -1){
-                                System.out.println("This ID are already been using, choose anotherone:");
-                                d = input.nextInt();
-                            }
-                            emp[j].id = d;
-                            System.out.println("The new ID is " + emp[j].id);
-                        }
-                    
-                    break;
-                
-                case 7:
                 
                     System.out.println("Union fee current: " + emp[j].unionFee);
                     System.out.println("Would you like to change?");
@@ -361,14 +342,17 @@ public class FolhaDePagamento {
         int bonusComissoes = 0;
         
         Employee[] emp = new Employee[max]; // Array de funcionarios
-        Employee[] copy = new Employee[max]; // Array cópia do array de funcionarios
+        Employee[] copyUndo = new Employee[max]; // Array cópia do array de funcionarios
+        Employee[] copyRedo = new Employee[max]; // Array cópia do array de funcionarios
+        
         AppointmentBook [] books = new AppointmentBook[30]; // Array das agendas de pagamento
 
         Scanner input  = new Scanner(System.in);
   
         for(i = 0; i < 100; i++){
             emp[i] = new Employee();
-            copy[i] = new Employee();
+            copyUndo[i] = new Employee();
+            copyRedo[i] = new Employee();
             if(i < 30){
                 books[i] = new AppointmentBook();
             }
@@ -429,7 +413,7 @@ public class FolhaDePagamento {
         */
         emp[2].id = 3; // Número de identificação
        
-        i = 4; // Controle do número de empregados
+        i = 3; // Controle do número de empregados
         
         short n;
        
@@ -448,10 +432,12 @@ public class FolhaDePagamento {
             System.out.println("8 - Undo / Redo");
             System.out.println("9 - To Choose a payment schedule");
             System.out.println("10 - Create a new Appointment Book");     
+            System.out.println("11 - Show all the registered");
+            System.out.println();
             System.out.println("0 - Exit");
             
             friday = isFriday(day, f);
-                if(friday == 1){
+                if(friday > 1){
                     System.out.println("                             Sexta-feira! (" + day + ")");
                     aux++;
                         if(aux > 4){ // Controle das sextas-feiras do mês
@@ -466,7 +452,7 @@ public class FolhaDePagamento {
             c = input.nextLine(); // Pegando /n do ultimo scanner
             
             if(n < 8){ // Salvar o status do array de funcionarios para um possível undo
-                copy = copyStatusArray(emp, copy, i);
+                copyUndo = copyStatusArray(emp, copyUndo, i);
             }
             
             switch(n){
@@ -495,9 +481,11 @@ public class FolhaDePagamento {
                 
                 case 2: // Remover um empregado
                     
+                    System.out.println("***** Remove *****");
+                    
                     System.out.println("Please Insert the ID of The Employee");
                     j = input.nextInt();
-                    if(emp[j].name == null){
+                    if(checkId(emp, j) == 0){
                         System.out.println("ID not find");
                     }
                     else{
@@ -507,6 +495,7 @@ public class FolhaDePagamento {
                         d = input.nextInt(); // Decisão
 
                         if(d == 1){
+                            System.out.println(emp[j].name + " was removed");
                             emp = remove(emp, j);
                         }
                     }
@@ -515,9 +504,17 @@ public class FolhaDePagamento {
                     
                 case 3: // BATER O PONTO!
                     
+                    System.out.println("***** Punch the clock! *****");
+                    
                     System.out.println("Please, insert your ID:");
                     
                     j = input.nextInt();
+                    
+                    while(checkId(emp, j) == 0){
+                        System.out.println("ID not find");
+                        System.out.println("Please insert a corret ID:");
+                        j = input.nextInt();
+                    }
                     
                     System.out.println("What day is today?");
                     
@@ -552,22 +549,41 @@ public class FolhaDePagamento {
                 
                 case 4: // Resultado de venda
                     
+                    System.out.println("***** Sold Result *****");
+                    
                     System.out.println("Please, insert the result:");
                     r = input.nextInt();
                     System.out.println("Please, insert the ID of whom sell");
                     j = input.nextInt();
-                        if(emp[j].type == 3){ // Recebe uma comissão!
+                    
+                    while(checkId(emp, j) == 0){
+                        System.out.println("ID not find");
+                        System.out.println("Please insert a corret ID:");
+                        j = input.nextInt();
+                    }
+                    
+                    if(emp[j].type == 3){ // Recebe uma comissão!
                             emp[j].bonusCom += r;
                         }
+                    
                     break;
                     
                 case 5: // Taxa de serviço
+                    
+                    System.out.println("***** Service Charge *****");
                     
                     System.out.println("Please, report an income service");
                     t = input.nextDouble();
                     System.out.println("Please, reference to what employee?");
                     System.out.println("ID:");
                     j = input.nextInt();
+                    
+                    while(checkId(emp, j) == 0){
+                        System.out.println("ID not find");
+                        System.out.println("Please insert a corret ID:");
+                        j = input.nextInt();
+                    }
+                    
                     emp[j].incomeService = t;
                             
                     break;
@@ -595,16 +611,18 @@ public class FolhaDePagamento {
                 
                 case 7: // RODAR FOLHA DE PAGAMENTO
                     
+                    System.out.println("***** Payroll! *****");
+                    
                     System.out.println("Please, insert the day of payment");
                     p = input.nextInt();
                     
+                    x = weekday();// Descobrir que dia da semana é hoje
+                               
                     for(k = 0; k < i; k++){
                           
                         switch (emp[k].type) {
                             case 1:
                                 // HORISTA
-                                
-                                x = weekday();// Descobrir que dia da semana é hoje
                                 
                                 if(emp[k].appBook != 3 || books[emp[k].appBook].weekday == x){
                                     x = (emp[k].workHoursTotal * emp[k].perHour);
@@ -654,9 +672,28 @@ public class FolhaDePagamento {
                     break;
                 case 8: // UNDO / REDO
                     
-                    emp = copy; /* Copiar para o array informações anteriores
-                    a ultima ação realizada
-                    */
+                    System.out.println("1 - Undo ( <- )");
+                    System.out.println("2 - Redo ( -> )");
+                    
+                    d = input.nextInt();
+                    
+                    if(d == 1){
+                        
+                        copyRedo = copyStatusArray(emp, copyRedo, i);
+                        
+                        emp = copyUndo; 
+                        /* 
+                            Copiar para o array informações anteriores
+                        a ultima ação realizada
+                        
+                        */
+                        
+                    }
+                    else if(d == 2){
+                        
+                        copyRedo = copyStatusArray(copyRedo, emp, i);
+                        
+                    }
                     
                     break;
                     
@@ -717,6 +754,16 @@ public class FolhaDePagamento {
                             break;
                          }
                     
+                    break;
+                    
+                case 11:
+                    
+                    for(k = 0; k < i; k++){
+                        if(emp[k].id != -1){
+                            System.out.println(emp[k].name + " - ID: " + (k+1));
+                        }
+                    }
+
                     break;
                 
                 default:
