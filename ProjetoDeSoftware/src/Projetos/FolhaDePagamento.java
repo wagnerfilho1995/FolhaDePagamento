@@ -541,7 +541,10 @@ public class FolhaDePagamento {
                                     emp[j].hourLeave = input.nextInt();
                                     emp[j].workHoursToday = (emp[j].hourLeave - emp[j].hourArrive);
                                     System.out.println(emp[j].workHoursToday + " hrs did you worked today!");
-                                    emp[j].workHoursTotal += emp[j].workHoursToday;
+                                    if(emp[j].workHoursToday > 8){
+                                        emp[j].extraHours += 8 - emp[j].workHoursToday;
+                                    }
+                                    emp[j].workHoursTotal += (emp[j].workHoursToday - emp[j].extraHours);
                                 }
                         }
                         
@@ -626,6 +629,7 @@ public class FolhaDePagamento {
                                 
                                 if(emp[k].appBook != 3 || books[emp[k].appBook].weekday == x){
                                     x = (emp[k].workHoursTotal * emp[k].perHour);
+                                    x += (emp[k].extraHours * emp[k].perHour * 1.5);
                                     if(emp[k].syndicate == 1){
                                         x *= (1 - emp[k].unionFee);
                                     }
@@ -633,7 +637,9 @@ public class FolhaDePagamento {
                                         x *= (1 - emp[k].incomeService);
                                     }
                                     System.out.println(emp[k].name + " recebeu " + x);
-                                 }
+                                    emp[k].workHoursTotal = 0;
+                                    emp[k].extraHours = 0;
+                                }
                                 
                                 break;
                                 

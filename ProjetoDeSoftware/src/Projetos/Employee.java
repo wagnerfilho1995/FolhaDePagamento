@@ -16,6 +16,7 @@ public class Employee {
     public double incomeService; // Taxa de serviço
     public double unionFee; // Taxa do sindicato
     public double perHour; // Ganho percentual por hora trabalhada
+    public int extraHours; // Horas extras
     public double perCom; // Ganho percentual por comissão
     public double bonusCom; // Ganho percentual por comissão
     public int appBook; // Tipo de agenda
